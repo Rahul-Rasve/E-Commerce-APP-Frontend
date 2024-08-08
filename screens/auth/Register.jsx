@@ -1,31 +1,38 @@
-import {
-	View,
-	Text,
-	TextInput,
-	TouchableOpacity,
-	Keyboard,
-} from "react-native";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
 import React, { useState } from "react";
 import InputField from "../../components/InputField";
 import CustomButton from "../../components/CustomButton";
-import { router } from "expo-router";
+import axios from "axios";
 
-const Register = () => {
+const Register = ({ navigation }) => {
+	const [loading, setLoading] = useState(false);
+
 	const [form, setForm] = useState({
 		name: "",
 		email: "",
 		password: "",
 	});
 
-	const [loading, setLoading] = useState(false);
-
 	const submit = async () => {
-		if (form.name === "" || form.email === "" || form.password === "") {
-			alert("Please fill out all fields");
-			return;
-		}
+		try {
+			if (!form.name || !form.email || !form.password) {
+				Alert.alert("All fields are mandatory!");
+				setLoading(false);
+				return;
+			}
+			setLoading(true);
+			const { data } = await axios.post(
+				"http://192.168.0.100:8080/api/v1/auth/register",
+				{ ...form }
+			);
 
-		setLoading(true);
+			Alert.alert(data && data.message);
+		} catch (error) {
+			Alert.alert(error.response.data.message);
+			console.log(error);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	return (
@@ -63,7 +70,7 @@ const Register = () => {
 
 			<View className="flex flex-row justify-center mt-5">
 				<Text className="text-gray-500 text-lg">Already have an account?</Text>
-				<TouchableOpacity>
+				<TouchableOpacity onPress={() => navigation.navigate("Login")}>
 					<Text className="text-gray-500 font-semibold ml-2 text-lg">
 						Login
 					</Text>
