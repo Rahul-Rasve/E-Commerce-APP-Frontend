@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import InputField from "../../components/InputField";
 import CustomButton from "../../components/CustomButton";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = ({ navigation }) => {
 	const [form, setForm] = useState({
@@ -11,6 +12,12 @@ const Login = ({ navigation }) => {
 	});
 
 	const [loading, setLoading] = useState(false);
+
+	const checkdataStrored = async () => {
+		const value = await AsyncStorage.getItem("@auth");
+		console.log("Local Storage Data :==> " + value);
+	};
+	checkdataStrored();
 
 	const submit = async () => {
 		try {
@@ -24,6 +31,9 @@ const Login = ({ navigation }) => {
 				"http://192.168.0.100:8080/api/v1/auth/login",
 				{ ...form }
 			);
+
+			//store the user data locally
+			await AsyncStorage.setItem("@auth", JSON.stringify(data));
 
 			Alert.alert(data && data.message);
 		} catch (error) {
