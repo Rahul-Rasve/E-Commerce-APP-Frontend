@@ -1,11 +1,15 @@
 import { View, Text, TouchableOpacity, Alert } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import InputField from "../../components/InputField";
 import CustomButton from "../../components/CustomButton";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContext } from "../../context/authContext";
 
 const Login = ({ navigation }) => {
+	//global state
+	const [state, setState] = useContext(AuthContext);
+
 	const [form, setForm] = useState({
 		email: "",
 		password: "",
@@ -17,7 +21,7 @@ const Login = ({ navigation }) => {
 		const value = await AsyncStorage.getItem("@auth");
 		console.log("Local Storage Data :==> " + value);
 	};
-	checkdataStrored();
+	// checkdataStrored();
 
 	const submit = async () => {
 		try {
@@ -31,11 +35,18 @@ const Login = ({ navigation }) => {
 				"http://192.168.0.100:8080/api/v1/auth/login",
 				{ ...form }
 			);
+			if (data) {
+				console.log("Data found in Login : " + data);
+			}
+
+			setState(data);
 
 			//store the user data locally
 			await AsyncStorage.setItem("@auth", JSON.stringify(data));
+			// checkdataStrored();
 
 			Alert.alert(data && data.message);
+			navigation.navigate("Home");
 		} catch (error) {
 			Alert.alert(error.response.data.message);
 			console.log(error);
