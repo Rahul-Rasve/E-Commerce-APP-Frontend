@@ -6,28 +6,31 @@ const AuthContext = createContext();
 
 //provider
 const AuthProvider = ({ children }) => {
-  //golbal state
-  const [state, setState] = useState({
-    user: null,
-    token: "",
-  });
+	//golbal state
+	const [state, setState] = useState({
+		user: null,
+		token: "",
+	});
 
-  // initial local storage data
-  useEffect(() => {
-    const loadLoaclStorageData = async () => {
-      let data = await AsyncStorage.getItem("@auth");
-      let loginData = JSON.parse(data);
+	//defualt axios settings
+	axios.defaults.baseURL = "http://192.168.0.101:8080/api/v1/";
 
-      setState({ ...state, user: loginData?.user, token: loginData?.token });
-    };
-    loadLoaclStorageData();
-  }, []);
+	// initial local storage data
+	useEffect(() => {
+		const loadLocalStorageUserData = async () => {
+			let data = await AsyncStorage.getItem("@auth");
+			let loginData = JSON.parse(data);
 
-  return (
-    <AuthContext.Provider value={[state, setState]}>
-      {children}
-    </AuthContext.Provider>
-  );
+			setState({ ...state, user: loginData?.user, token: loginData?.token });
+		};
+		loadLocalStorageUserData();
+	}, []);
+
+	return (
+		<AuthContext.Provider value={[state, setState]}>
+			{children}
+		</AuthContext.Provider>
+	);
 };
 
 export { AuthContext, AuthProvider };

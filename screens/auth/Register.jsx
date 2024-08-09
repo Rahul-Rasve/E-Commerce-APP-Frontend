@@ -13,7 +13,7 @@ const Register = ({ navigation }) => {
 		password: "",
 	});
 
-	const submit = async () => {
+	const handleSubmit = async () => {
 		try {
 			if (!form.name || !form.email || !form.password) {
 				Alert.alert("All fields are mandatory!");
@@ -21,12 +21,10 @@ const Register = ({ navigation }) => {
 				return;
 			}
 			setLoading(true);
-			const { data } = await axios.post(
-				"http://192.168.0.100:8080/api/v1/auth/register",
-				{ ...form }
-			);
+			const { data } = await axios.post("auth/register", { ...form });
 
 			Alert.alert(data && data.message);
+			navigation.navigate("Login");
 		} catch (error) {
 			Alert.alert(error.response.data.message);
 			console.log(error);
@@ -66,7 +64,11 @@ const Register = ({ navigation }) => {
 				/>
 			</View>
 
-			<CustomButton title="Sign Up" handlePress={submit} isLoading={loading} />
+			<CustomButton
+				title="Sign Up"
+				handlePress={handleSubmit}
+				isLoading={loading}
+			/>
 
 			<View className="flex flex-row justify-center mt-5">
 				<Text className="text-gray-500 text-lg">Already have an account?</Text>

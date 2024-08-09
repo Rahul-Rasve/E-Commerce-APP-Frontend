@@ -32,12 +32,9 @@ const Login = ({ navigation }) => {
 			}
 
 			const { data } = await axios.post(
-				"http://192.168.0.100:8080/api/v1/auth/login",
+				"auth/login",
 				{ ...form }
 			);
-			if (data) {
-				console.log("Data found in Login : " + data);
-			}
 
 			setState(data);
 
@@ -45,7 +42,7 @@ const Login = ({ navigation }) => {
 			await AsyncStorage.setItem("@auth", JSON.stringify(data));
 			// checkdataStrored();
 
-			Alert.alert(data && data.message);
+			// Alert.alert(data && data.message);
 			navigation.navigate("Home");
 		} catch (error) {
 			Alert.alert(error.response.data.message);
