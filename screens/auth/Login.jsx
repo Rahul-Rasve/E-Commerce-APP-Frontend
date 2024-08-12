@@ -19,9 +19,11 @@ const Login = ({ navigation }) => {
 
 	const checkdataStrored = async () => {
 		const value = await AsyncStorage.getItem("@auth");
-		console.log("Local Storage Data :==> " + value);
+		if (value) {
+			navigation.navigate("Home");
+		}
 	};
-	// checkdataStrored();
+	checkdataStrored();
 
 	const submit = async () => {
 		try {
@@ -31,10 +33,7 @@ const Login = ({ navigation }) => {
 				return;
 			}
 
-			const { data } = await axios.post(
-				"auth/login",
-				{ ...form }
-			);
+			const { data } = await axios.post("auth/login", { ...form });
 
 			setState(data);
 
