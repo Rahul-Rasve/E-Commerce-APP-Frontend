@@ -17,14 +17,6 @@ const Login = ({ navigation }) => {
 
 	const [loading, setLoading] = useState(false);
 
-	const checkdataStrored = async () => {
-		const value = await AsyncStorage.getItem("@auth");
-		if (value) {
-			navigation.navigate("Home");
-		}
-	};
-	checkdataStrored();
-
 	const submit = async () => {
 		try {
 			setLoading(true);

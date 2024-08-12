@@ -2,17 +2,19 @@ import { View, Text } from "react-native";
 import React, { useContext } from "react";
 import { AuthContext } from "../context/authContext";
 import Footer from "../components/Footer";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Header from "../components/PageHeader";
 
 const Home = () => {
 	//global context
 	const [state] = useContext(AuthContext);
 
 	return (
-		<View className="flex-1 justify-between ">
-			<Text>Home</Text>
+		<SafeAreaView className="flex-1 justify-between ">
+			<Header title="Home" />
 			<Text>{JSON.stringify(state, null, 4)}</Text>
 			<Footer />
-		</View>
+		</SafeAreaView>
 	);
 };
 
