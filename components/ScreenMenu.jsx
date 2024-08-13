@@ -4,6 +4,9 @@ import Register from "../screens/auth/Register";
 import Home from "../screens/Home";
 import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
+import Posts from "../screens/Posts";
+import About from "../screens/About";
+import Account from "../screens/Account";
 
 const ScreenMenu = () => {
 	//global state
@@ -15,11 +18,28 @@ const ScreenMenu = () => {
 	return (
 		<Stack.Navigator initialRouteName="Login">
 			{authenticatedUser ? (
-				<Stack.Screen
-					name="Home"
-					component={Home}
-					options={{ headerShown: false }}
-				/>
+				<>
+					<Stack.Screen
+						name="Home"
+						component={Home}
+						options={{ headerShown: false }}
+					/>
+					<Stack.Screen
+						name="Post"
+						component={Posts}
+						options={{ headerShown: false }}
+					/>
+					<Stack.Screen
+						name="About"
+						component={About}
+						options={{ headerShown: false }}
+					/>
+					<Stack.Screen
+						name="Account"
+						component={Account}
+						options={{ headerShown: false }}
+					/>
+				</>
 			) : (
 				<>
 					<Stack.Screen
