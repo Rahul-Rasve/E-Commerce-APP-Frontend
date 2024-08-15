@@ -5,30 +5,61 @@ import {
 	TextInput,
 	ScrollView,
 	TouchableOpacity,
+	Alert,
+	ActivityIndicator,
 } from "react-native";
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/authContext";
 import Footer from "../components/Footer";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/PageHeader";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Account = () => {
 	//global context
-	const [state] = useContext(AuthContext);
+	const [state, setState] = useContext(AuthContext);
 
 	const { user } = state;
 
 	//user detail local states
-	const [username, setUsername] = useState(user?.name);
+	const [name, setName] = useState(user?.name);
 	const [password, setPassword] = useState(user?.password);
 	const [email] = useState(user?.email);
 
 	//loading effect state
 	const [loading, setLoading] = useState(false);
 
+	const handleSubmit = async () => {
+		try {
+			if (!name || !password) {
+				Alert.alert("Name & Password cannot be empty!");
+				return;
+			} else {
+				setLoading(true);
+
+				console.log("Updated name : " + name);
+
+				const { data } = await axios.put("/auth/update-user", {
+					name,
+					password,
+					email,
+				});
+
+				let jsonData = JSON.stringify(data);
+				setState({ ...state, user: jsonData?.updatedUser });
+			}
+		} catch (error) {
+			Alert.alert(error.response.data.message);
+			console.log(error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	return (
 		<SafeAreaView className="flex-1 h-full">
-			<ScrollView contentContainerStyle={{ height: "100%" }}>
+			<ScrollView>
 				<Header title="Account" showLogoutButton={true} />
 				<View className="items-center mt-5">
 					<Image
@@ -45,8 +76,8 @@ const Account = () => {
 					<Text className="text-base">Name</Text>
 					<TextInput
 						className=" bg-red-50 border-2 border-orange-400 text-base px-4 mt-1 h-10 rounded-lg"
-						value={username}
-						onChangeText={(value) => setUsername(value)}
+						value={name}
+						onChangeText={(text) => setName(text)}
 					/>
 				</View>
 				<View className=" mt-5 mx-4 ">
@@ -63,20 +94,30 @@ const Account = () => {
 						className=" bg-red-50 border-2 border-orange-400 text-base px-4 mt-1 h-10 rounded-lg"
 						value={password}
 						secureTextEntry={true}
-						onChangeText={(value) => setPassword(value)}
+						onChangeText={(text) => setPassword(text)}
 					/>
 				</View>
 
 				<View className="items-center justify-center">
-					<TouchableOpacity className=" items-center border-2 border-orange-500 bg-orange-100 rounded-full mx-4 mt-10 w-[20vh]">
-						<Text className=" text-base font-semibold py-2 ">Save Profile</Text>
+					<TouchableOpacity
+						onPress={handleSubmit}
+						className=" items-center border-2 border-orange-500 bg-orange-100 rounded-full mx-4 mt-10 w-[20vh]">
+						{loading ? (
+							<View className="py-2">
+								<ActivityIndicator size="small" color="#ffffff" />
+							</View>
+						) : (
+							<Text className=" text-base font-semibold py-2 ">
+								Save Profile
+							</Text>
+						)}
 					</TouchableOpacity>
 				</View>
-
-				<View className="flex-1 justify-end">
-					<Footer />
-				</View>
 			</ScrollView>
+
+			<View className="flex-1 justify-end">
+				<Footer />
+			</View>
 		</SafeAreaView>
 	);
 };
