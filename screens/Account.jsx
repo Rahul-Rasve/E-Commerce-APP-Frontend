@@ -20,7 +20,7 @@ const Account = () => {
 	//global context
 	const [state, setState] = useContext(AuthContext);
 
-	const { user } = state;
+	const { user, token } = state;
 
 	//user detail local states
 	const [name, setName] = useState(user?.name);
@@ -32,23 +32,21 @@ const Account = () => {
 
 	const handleSubmit = async () => {
 		try {
-			if (!name || !password) {
-				Alert.alert("Name & Password cannot be empty!");
-				return;
-			} else {
-				setLoading(true);
+			setLoading(true);
 
-				console.log("Updated name : " + name);
+			console.log("Updated name : " + name);
 
-				const { data } = await axios.put("/auth/update-user", {
+			const { data } = await axios.put(
+				"/auth/update-user",
+				{
 					name,
 					password,
 					email,
-				});
+				}
+			);
 
-				let jsonData = JSON.stringify(data);
-				setState({ ...state, user: jsonData?.updatedUser });
-			}
+			let jsonData = JSON.stringify(data);
+			setState({ ...state, user: jsonData?.updatedUser });
 		} catch (error) {
 			Alert.alert(error.response.data.message);
 			console.log(error);

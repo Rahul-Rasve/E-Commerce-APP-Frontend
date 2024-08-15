@@ -12,9 +12,6 @@ const AuthProvider = ({ children }) => {
 		token: "",
 	});
 
-	//defualt axios settings
-	axios.defaults.baseURL = "http://192.168.0.101:8080/api/v1/";
-
 	// initial local storage data
 	useEffect(() => {
 		const loadLocalStorageUserData = async () => {
@@ -25,6 +22,10 @@ const AuthProvider = ({ children }) => {
 		};
 		loadLocalStorageUserData();
 	}, []);
+
+	//defualt axios settings
+	axios.defaults.headers.common["Authorization"] = `Bearer ${state?.token}`;
+	axios.defaults.baseURL = "http://192.168.0.101:8080/api/v1/";
 
 	return (
 		<AuthContext.Provider value={[state, setState]}>
