@@ -36,7 +36,7 @@ const Login = ({ navigation }) => {
 			// Alert.alert(data && data.message);
 			navigation.navigate("Home");
 		} catch (error) {
-			Alert.alert(error.response.data.message);
+			Alert.alert("Error", error.response.data.message);
 			console.log(error);
 		} finally {
 			setLoading(false);
