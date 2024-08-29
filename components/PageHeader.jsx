@@ -15,7 +15,7 @@ const Header = ({ title, showLogoutButton = false }) => {
 	};
 
 	return (
-		<View className="flex-row justify-between m-5">
+		<View className="flex-row justify-between p-5 ">
 			<Text className="text-xl font-semibold">{title}</Text>
 			{showLogoutButton ? (
 				<TouchableOpacity

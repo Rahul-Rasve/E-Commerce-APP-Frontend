@@ -14,10 +14,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/PageHeader";
 import { StyleSheet } from "react-native";
 import axios from "axios";
+import { PostContext } from "../context/postContext";
 
 const Posts = ({ navigation }) => {
 	//global context
 	const [state] = useContext(AuthContext);
+	const [posts, setPosts] = useContext(PostContext);
 
 	const [loading, setLoading] = useState(false);
 	const [title, setTitle] = useState("");
@@ -36,7 +38,8 @@ const Posts = ({ navigation }) => {
 				title,
 				description,
 			});
-			console.log(data);
+			
+			setPosts([...posts, data?.post]);
 
 			Alert.alert("Success", data?.message);
 			navigation.navigate("Home");

@@ -1,11 +1,14 @@
 import React from "react";
 import { AuthProvider } from "./context/authContext";
 import ScreenMenu from "./components/ScreenMenu";
+import { PostProvider } from "./context/postContext";
 
 const RootNavigation = () => {
 	return (
 		<AuthProvider>
-			<ScreenMenu />
+			<PostProvider>
+				<ScreenMenu />
+			</PostProvider>
 		</AuthProvider>
 	);
 };

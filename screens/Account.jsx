@@ -36,14 +36,11 @@ const Account = () => {
 
 			console.log("Updated name : " + name);
 
-			const { data } = await axios.put(
-				"/auth/update-user",
-				{
-					name,
-					password,
-					email,
-				}
-			);
+			const { data } = await axios.put("/auth/update-user", {
+				name,
+				password,
+				email,
+			});
 
 			let jsonData = JSON.stringify(data);
 			setState({ ...state, user: jsonData?.updatedUser });
@@ -57,8 +54,8 @@ const Account = () => {
 
 	return (
 		<SafeAreaView className="flex-1 h-full">
+			<Header title="Account" showLogoutButton={true} />
 			<ScrollView>
-				<Header title="Account" showLogoutButton={true} />
 				<View className="items-center mt-5">
 					<Image
 						className="rounded-full"
