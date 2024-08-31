@@ -38,7 +38,7 @@ const Posts = ({ navigation }) => {
 				title,
 				description,
 			});
-			
+
 			setPosts([...posts, data?.post]);
 
 			Alert.alert("Success", data?.message);
@@ -52,48 +52,50 @@ const Posts = ({ navigation }) => {
 	};
 
 	return (
-		<SafeAreaView className="flex-1 justify-between ">
+		<SafeAreaView className="h-full">
 			<Header title="Post" />
 
-			<ScrollView>
-				<View className="items-center mx-5 ">
-					<Text className=" text-3xl font-semibold ">Create a Post</Text>
+			<View className="flex-1 justify-between mt-10">
+				<ScrollView>
+					<View className="items-center mx-5 ">
+						<Text className=" text-3xl font-semibold ">Create a Post</Text>
 
-					<TextInput
-						placeholder="Add a post title"
-						value={title}
-						onChangeText={(text) => setTitle(text)}
-						className=" w-full bg-[#ffffff] mt-8 text-base pl-4 border border-gray-600 py-1 rounded-md "
-					/>
+						<TextInput
+							placeholder="Add a post title"
+							value={title}
+							onChangeText={(text) => setTitle(text)}
+							className=" w-full bg-[#ffffff] mt-8 text-base pl-4 border border-gray-600 py-1 rounded-md "
+						/>
 
-					<TextInput
-						placeholder="Add post description"
-						value={description}
-						onChangeText={(text) => setDescription(text)}
-						multiline={true}
-						numberOfLines={6}
-						style={styles.multiline}
-						className=" w-full pt-0 bg-[#ffffff] mt-6 text-base pl-4 border border-gray-600 py-1 rounded-md "
-					/>
+						<TextInput
+							placeholder="Add post description"
+							value={description}
+							onChangeText={(text) => setDescription(text)}
+							multiline={true}
+							numberOfLines={6}
+							style={styles.multiline}
+							className=" w-full pt-0 bg-[#ffffff] mt-6 text-base pl-4 border border-gray-600 py-1 rounded-md "
+						/>
 
-					<View>
-						<TouchableOpacity
-							onPress={handlePostCreate}
-							className=" w-[300px] mt-8 py-1 bg-black items-center justify-center border-[3px] border-blue-500 rounded-2xl ">
-							{loading ? (
-								<ActivityIndicator />
-							) : (
-								<Text className=" text-xl font-semibold text-slate-300 ">
-									Create Post
-								</Text>
-							)}
-						</TouchableOpacity>
+						<View>
+							<TouchableOpacity
+								onPress={handlePostCreate}
+								className=" w-[300px] mt-8 py-1 bg-black items-center justify-center border-[3px] border-blue-500 rounded-2xl ">
+								{loading ? (
+									<ActivityIndicator />
+								) : (
+									<Text className=" text-xl font-semibold text-slate-300 ">
+										Create Post
+									</Text>
+								)}
+							</TouchableOpacity>
+						</View>
 					</View>
-				</View>
-			</ScrollView>
+				</ScrollView>
 
-			<View className="flex-1 justify-end">
-				<Footer />
+				<View className="absolute bottom-0 left-0 right-0 bg-[#ffffff] ">
+					<Footer />
+				</View>
 			</View>
 		</SafeAreaView>
 	);

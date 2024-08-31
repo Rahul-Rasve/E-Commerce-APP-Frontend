@@ -22,7 +22,7 @@ const Home = () => {
 				{/* <Text>{JSON.stringify(posts, null, 4)}</Text> */}
 			</ScrollView>
 
-			<View className=" bg-[#ffffff] ">
+			<View className="  bg-[#ffffff] ">
 				<Footer />
 			</View>
 		</SafeAreaView>

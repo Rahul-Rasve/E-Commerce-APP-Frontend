@@ -7,6 +7,7 @@ import { AuthContext } from "../context/authContext";
 import Posts from "../screens/Posts";
 import About from "../screens/About";
 import Account from "../screens/Account";
+import MyPosts from "../screens/MyPosts";
 
 const ScreenMenu = () => {
 	//global state
@@ -30,8 +31,8 @@ const ScreenMenu = () => {
 						options={{ headerShown: false }}
 					/>
 					<Stack.Screen
-						name="About"
-						component={About}
+						name="MyPosts"
+						component={MyPosts}
 						options={{ headerShown: false }}
 					/>
 					<Stack.Screen
