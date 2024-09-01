@@ -14,7 +14,6 @@ import Footer from "../components/Footer";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/PageHeader";
 import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Account = () => {
 	//global context

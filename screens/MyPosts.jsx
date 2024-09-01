@@ -35,7 +35,7 @@ const MyPosts = () => {
 			<Header title="My Posts" />
 
 			<ScrollView>
-				<PostCard posts={posts} isEditable={true} />
+				<PostCard myPosts={posts} isEditable={true} />
 
 				{/* <Text>{JSON.stringify(posts, null, 4)}</Text> */}
 			</ScrollView>

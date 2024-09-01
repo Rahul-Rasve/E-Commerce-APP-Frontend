@@ -17,7 +17,7 @@ const Home = () => {
 			<Header title="Home" />
 
 			<ScrollView>
-				<PostCard posts={posts} />
+				<PostCard myPosts={posts} />
 
 				{/* <Text>{JSON.stringify(posts, null, 4)}</Text> */}
 			</ScrollView>
