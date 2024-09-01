@@ -1,13 +1,17 @@
 import { View, Text, TouchableOpacity, Alert } from "react-native";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import moment from "moment";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import axios from "axios";
 import { PostContext } from "../context/postContext";
 import { useNavigation } from "@react-navigation/native";
+import EditModal from "./EditModal";
 
 const PostCard = ({ myPosts, isEditable = false }) => {
 	const [posts, setPosts] = useContext(PostContext);
+
+	const [modalVisible, setModalVisible] = useState(false);
+	const [updatePost, setUpdatePost] = useState({});
 
 	const navigation = useNavigation();
 
@@ -36,7 +40,7 @@ const PostCard = ({ myPosts, isEditable = false }) => {
 					text: "Delete",
 					onPress: () => {
 						deletePost(_id);
-						navigation.replace("MyPosts")
+						navigation.replace("MyPosts");
 					},
 					style: "destructive",
 				},
@@ -49,6 +53,14 @@ const PostCard = ({ myPosts, isEditable = false }) => {
 
 	return (
 		<View>
+			{isEditable && (
+				<EditModal
+					modalVisible={modalVisible}
+					setModalVisible={setModalVisible}
+					post={updatePost}
+				/>
+			)}
+
 			{myPosts?.map((post, index) => (
 				<View
 					className=" border border-gray-400 p-5 rounded-xl mx-4 my-2 bg-[#ffffff] "
@@ -62,21 +74,21 @@ const PostCard = ({ myPosts, isEditable = false }) => {
 						className={`flex-row mt-5 ${
 							isEditable ? "justify-end" : "justify-between"
 						}`}>
-						{!isEditable ? (
+						{!isEditable && (
 							<Text>
 								{" "}
 								<FontAwesome5 name="user" size={17} /> {"  "}{" "}
 								{post?.postedBy?.name}
 							</Text>
-						) : null}
+						)}
 						<Text>{moment(post?.createdAt).format("DD-MM-YYYY")}</Text>
 					</View>
 
-					{isEditable ? (
+					{isEditable && (
 						<View className=" flex-row mt-5 justify-between ">
 							<TouchableOpacity
 								onPress={() => {
-									console.log(`Post : ${JSON.stringify(post, null, 4)}`);
+									// console.log(`Post : ${JSON.stringify(post, null, 4)}`);
 									handleDelete(post?._id);
 								}}
 								className="border border-gray-700 py-2 px-5 rounded-full bg-[#FFF8E8]">
@@ -84,12 +96,15 @@ const PostCard = ({ myPosts, isEditable = false }) => {
 							</TouchableOpacity>
 
 							<TouchableOpacity
-								onPress={handleEdit}
+								onPress={() => {
+									setUpdatePost(post);
+									setModalVisible(true);
+								}}
 								className="border border-gray-700 py-2 px-5 rounded-full bg-[#FFF8E8]">
 								<FontAwesome5 name="edit" size={20} />
 							</TouchableOpacity>
 						</View>
-					) : null}
+					)}
 				</View>
 			))}
 		</View>
