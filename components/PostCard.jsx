@@ -40,7 +40,7 @@ const PostCard = ({ myPosts, isEditable = false }) => {
 					text: "Delete",
 					onPress: () => {
 						deletePost(_id);
-						navigation.replace("MyPosts");
+						navigation.push("MyPosts");
 					},
 					style: "destructive",
 				},

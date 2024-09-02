@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import {
@@ -14,6 +15,8 @@ const EditModal = ({ modalVisible, setModalVisible, post }) => {
 	const [title, setTitle] = useState("");
 	const [description, setDescription] = useState("");
 	const [loading, setLoading] = useState(false);
+
+	const navigation = useNavigation();
 
 	//initial post data
 	useEffect(() => {
@@ -44,7 +47,8 @@ const EditModal = ({ modalVisible, setModalVisible, post }) => {
 			});
 
 			Alert.alert("Success", "Post updated successfully");
-            
+
+			navigation.replace("MyPosts");
 		} catch (error) {
 			console.error(error);
 			Alert.alert("Error", "Some error occurred");
