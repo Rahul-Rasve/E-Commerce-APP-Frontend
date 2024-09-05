@@ -128,12 +128,12 @@ const styles = StyleSheet.create({
 	shadowBox: {
 		shadowColor: "#000",
 		shadowOffset: {
-			width: 0,
-			height: 2,
+			width: 2,
+			height: 5,
 		},
-		shadowOpacity: 0.4,
-		shadowRadius: 4,
-		elevation: 5,
+		shadowOpacity: 0.9,
+		shadowRadius: 10,
+		elevation: 15,
 	},
 });
 

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Alert } from "react-native";
+import { View, Text, TouchableOpacity, Alert, StyleSheet } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import moment from "moment";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
@@ -6,9 +6,10 @@ import axios from "axios";
 import { PostContext } from "../context/postContext";
 import { useNavigation } from "@react-navigation/native";
 import EditModal from "./EditModal";
+import LoadingWidget from "./LoadingWidget";
 
 const PostCard = ({ myPosts, isEditable = false }) => {
-	const [posts, setPosts] = useContext(PostContext);
+	const [posts, setPosts, loading] = useContext(PostContext);
 
 	const [modalVisible, setModalVisible] = useState(false);
 	const [updatePost, setUpdatePost] = useState({});
@@ -61,9 +62,12 @@ const PostCard = ({ myPosts, isEditable = false }) => {
 				/>
 			)}
 
+			{!loading && <LoadingWidget />}
+
 			{myPosts.length > 0 ? (
 				myPosts?.map((post, index) => (
 					<View
+					style={styles.shadowBox}
 						className=" border border-gray-400 p-5 rounded-xl mx-4 my-2 bg-[#ffffff] "
 						key={index}>
 						<Text className=" font-bold text-2xl border-b pb-1 border-gray-500 ">
@@ -117,7 +121,7 @@ const PostCard = ({ myPosts, isEditable = false }) => {
 					</Text>
 
 					<TouchableOpacity
-						onPress={() => navigation.push("Posts")}
+						onPress={() => navigation.push("Post")}
 						className=" w-[300px] py-1 bg-black items-center justify-center border-[3px] border-orange-400 rounded-2xl ">
 						<Text className=" text-xl font-semibold text-slate-300 ">
 							Create a Post
@@ -128,5 +132,18 @@ const PostCard = ({ myPosts, isEditable = false }) => {
 		</View>
 	);
 };
+
+const styles = StyleSheet.create({
+	shadowBox: {
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 2,
+			height: 5,
+		},
+		shadowOpacity: 0.9,
+		shadowRadius: 10,
+		elevation: 6,
+	},
+});
 
 export default PostCard;

@@ -6,6 +6,9 @@ module.exports = {
 	],
 	theme: {
 		extend: {
+			boxShadow: {
+				// neon: "0 0 5px colors-purple-200, 0 0 20px colors-purple-700",
+			},
 			colors: {
 				primary_background: "#e1d5c9",
 				primary_title: "#1e2225",
