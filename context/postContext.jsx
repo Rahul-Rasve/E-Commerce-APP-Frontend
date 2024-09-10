@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect, createContext, useRef } from "react";
 import axios from "axios";
 
 const PostContext = createContext();
@@ -6,13 +6,16 @@ const PostContext = createContext();
 const PostProvider = ({ children }) => {
 	const [loading, setLoading] = useState(false);
 	const [posts, setPosts] = useState([]);
+	const [page, setPage] = useState(1);
+	const [isLastPageReceived, setIsLastPageReceived] = useState(false);
 
 	const getAllPosts = async () => {
 		try {
 			setLoading(true);
-			const { data } = await axios.get("post/get-posts");
+			const { data } = await axios.get(`post/get-posts/${page}`);
+			setIsLastPageReceived(data?.isLastPageFetched);
 
-			setPosts(data?.posts);
+			setPosts([...posts, ...data?.posts]);
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -22,11 +25,22 @@ const PostProvider = ({ children }) => {
 
 	//initial posts
 	useEffect(() => {
-		getAllPosts();
-	}, []);
+		if (!isLastPageReceived) {
+			getAllPosts();
+		}
+	}, [page]);
 
 	return (
-		<PostContext.Provider value={[posts, setPosts, getAllPosts, loading]}>
+		<PostContext.Provider
+			value={[
+				posts,
+				setPosts,
+				getAllPosts,
+				loading,
+				setLoading,
+				page,
+				setPage,
+			]}>
 			{children}
 		</PostContext.Provider>
 	);

@@ -22,10 +22,14 @@ const MyPosts = () => {
 	const [posts, setPosts] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [refresh, setRefresh] = useState(false);
+	const [isLastPageReceived, setIsLastPageReceived] = useState(false);
+	const [page, setPage] = useState(1);
 
 	// refresh control
 	const onRefresh = useCallback(() => {
 		setRefresh(true);
+		setPage(1);
+		setPosts([]);
 		getUserPosts();
 		setTimeout(() => {
 			setRefresh(false);
@@ -35,8 +39,10 @@ const MyPosts = () => {
 	const getUserPosts = async () => {
 		try {
 			setLoading(true);
-			const { data } = await axios.get("post/get-user-posts");
-			setPosts(data?.userPosts);
+			const { data } = await axios.get(`post/get-user-posts/${page}`);
+			setIsLastPageReceived(data?.isLastPageFetched);
+
+			setPosts([...posts, ...data?.userPosts]);
 		} catch (error) {
 			console.error(error);
 			Alert.alert("Error", "Some error occurred");
@@ -45,9 +51,17 @@ const MyPosts = () => {
 		}
 	};
 
+	const handleLoadMorePosts = () => {
+		if (!loading) {
+			setPage(page + 1);
+		}
+	};
+
 	useEffect(() => {
-		getUserPosts();
-	}, []);
+		if (!isLastPageReceived) {
+			getUserPosts();
+		}
+	}, [page]);
 
 	return (
 		<SafeAreaView className="flex-1 justify-between ">
@@ -59,6 +73,10 @@ const MyPosts = () => {
 				<FlatList
 					data={posts}
 					keyExtractor={(item) => item._id}
+					initialNumToRender={10}
+					removeClippedSubviews={true}
+					onEndReachedThreshold={0.7}
+					onEndReached={handleLoadMorePosts}
 					renderItem={({ item }) => <PostCard post={item} isEditable={true} />}
 					ListEmptyComponent={() => <EmptyContentComponent />}
 					refreshControl={

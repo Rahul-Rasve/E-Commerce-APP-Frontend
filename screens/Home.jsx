@@ -1,5 +1,5 @@
 import { View, ScrollView, RefreshControl, FlatList } from "react-native";
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useState, useRef } from "react";
 import { AuthContext } from "../context/authContext";
 import Footer from "../components/Footer";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -12,17 +12,27 @@ import LoadingWidget from "../components/LoadingWidget";
 const Home = () => {
 	//global context
 	const [state] = useContext(AuthContext);
-	const [posts, setPosts, getAllPosts, loading] = useContext(PostContext);
+	const [posts, setPosts, getAllPosts, loading, setLoading, page, setPage] =
+		useContext(PostContext);
 	const [refresh, setRefresh] = useState(false);
 
 	// refresh control
 	const onRefresh = useCallback(() => {
 		setRefresh(true);
+		setPage(1);
+		setPosts([]);
 		getAllPosts();
 		setTimeout(() => {
 			setRefresh(false);
 		}, 2000);
 	}, []);
+
+	//increment page
+	const handleLoadMorePosts = () => {
+		if (!loading) {
+			setPage(page + 1);
+		}
+	};
 
 	return (
 		<SafeAreaView className="flex-1 h-full ">
@@ -36,6 +46,8 @@ const Home = () => {
 					keyExtractor={(item) => item._id}
 					initialNumToRender={10}
 					removeClippedSubviews={true}
+					onEndReachedThreshold={0.7}
+					onEndReached={handleLoadMorePosts}
 					renderItem={({ item }) => <PostCard post={item} />}
 					ListEmptyComponent={() => <EmptyContentComponent />}
 					refreshControl={

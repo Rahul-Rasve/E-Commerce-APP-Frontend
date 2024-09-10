@@ -22,7 +22,7 @@ const PostCard = ({ post, isEditable = false }) => {
 
 			const { data } = await axios.delete(`post/delete-post/${_id}`);
 
-			setPosts((prevPosts) => prevPosts.filter((post) => post._id !== _id));
+			// setPosts((prevPosts) => prevPosts.filter((post) => post._id !== _id));
 
 			Alert.alert("Success", data?.message);
 		} catch (error) {
